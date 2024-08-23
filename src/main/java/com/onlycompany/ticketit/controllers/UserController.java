@@ -4,10 +4,7 @@ import com.onlycompany.ticketit.entities.User;
 import com.onlycompany.ticketit.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -22,6 +19,15 @@ public class UserController {
         User user = service.findById(id);
 
         return ResponseEntity.ok().body(user);
+
+    }
+
+    @PostMapping
+    public ResponseEntity<User> insert (@RequestBody User obj) {
+
+        obj = service.insert(obj);
+
+        return ResponseEntity.ok().body(obj);
 
     }
 

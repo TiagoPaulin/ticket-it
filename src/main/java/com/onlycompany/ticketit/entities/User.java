@@ -1,8 +1,10 @@
 package com.onlycompany.ticketit.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
@@ -14,18 +16,19 @@ public class User {
     private Long id;
     private String name;
     private String cpf;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
     private String email;
     private  String password;
 
     public User () {}
 
-    public User (Long id, String name, String cpf, LocalDate birthDate, String email, String password) {
+    public User (Long id, String name, String cpf, String birthDate, String email, String password) {
 
         this.id = id;
         this.name = name;
         this.cpf = cpf;
-        this.birthDate = birthDate;
+        setBirthDate(birthDate);
         this.email = email;
         this.password = password;
 
@@ -59,8 +62,12 @@ public class User {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthDate(String birthDate) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        this.birthDate = LocalDate.parse(birthDate, formatter);
+
     }
 
     public String getEmail() {
