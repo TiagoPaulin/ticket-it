@@ -2,6 +2,7 @@ package com.onlycompany.ticketit.services;
 
 import com.onlycompany.ticketit.entities.User;
 import com.onlycompany.ticketit.repositories.UserRepository;
+import com.onlycompany.ticketit.services.exceptions.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class UserService {
 
         Optional<User> obj = repository.findById(id);
 
-        return obj.get();
+        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 
     }
 
@@ -30,12 +31,24 @@ public class UserService {
 
     public void delete (Long id) {
 
+        if (!repository.existsById(id)) {
+
+            throw new ResourceNotFoundException(id);
+
+        }
+
         repository.deleteById(id);
 
     }
 
     @Transactional
     public User update (Long id, User obj) {
+
+        if (!repository.existsById(id)) {
+
+            throw new ResourceNotFoundException(id);
+
+        }
 
         User user = repository.getReferenceById(id);
 
