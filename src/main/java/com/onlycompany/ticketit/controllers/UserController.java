@@ -5,6 +5,9 @@ import com.onlycompany.ticketit.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -27,7 +30,10 @@ public class UserController {
 
         obj = service.insert(obj);
 
-        return ResponseEntity.ok().body(obj);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(obj.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(obj);
 
     }
 
